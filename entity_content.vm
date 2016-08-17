@@ -1,0 +1,82 @@
+
+
+==================================================
+ENTITY $entity.name 
+==================================================
+
+* GENERAL INFO 
+${DOLLAR}entity.name            = "$entity.name"    ( ${DOLLAR}fn.uncapitalize(${DOLLAR}entity.name) = "$fn.uncapitalize($entity.name)" )
+${DOLLAR}entity.package         = "$entity.package"
+${DOLLAR}entity.fullName        = "$entity.fullName"
+${DOLLAR}entity.databaseTable   = "$entity.databaseTable"
+${DOLLAR}entity.databaseCatalog = "$entity.databaseCatalog"
+${DOLLAR}entity.databaseSchema  = "$entity.databaseSchema"
+
+$env.setEntityClassNamePrefix("foo")
+#set( $env.entityClassNamePrefix = "MyPrefix" ) 
+entityClassNamePrefix : $env.entityClassNamePrefix
+${DOLLAR}entity.name            = "$entity.name" 
+${DOLLAR}entity.fullName        = "$entity.fullName"
+$env.setEntityClassNameSuffix("MySuffix")
+entityClassNameSuffix : $env.entityClassNameSuffix
+${DOLLAR}entity.name            = "$entity.name" 
+${DOLLAR}entity.fullName        = "$entity.fullName"
+
+* ATTRIBUTES ( ${DOLLAR}entity.attributes )
+#set ($attributes = $entity.attributes )
+## array.size() is available since Velocity 1.6
+${DOLLAR}entity.attributes.size() = $entity.attributes.size() 
+${DOLLAR}attributes.size() = $attributes.size() 
+${DOLLAR}entity.attributesCount = $entity.attributesCount
+
+* JPA ANNOTATIONS ( ${DOLLAR}jpa.entityAnnotations(2) )
+$jpa.entityAnnotations(2, $entity)
+
+* AUTOINCREMTED PRIMARY KEY ?
+#if ( $entity.hasAutoIncrementedKey() )
+ ${DOLLAR}entity.autoincrementedKeyAttribute.databaseName = $entity.autoincrementedKeyAttribute.databaseName
+#else
+ No autoincremented primary key
+#end
+
+* KEY ATTRIBUTES : 
+#foreach( $attribute in $entity.keyAttributes )
+ . $attribute.name : type = $attribute.type , auto-incremented = $attribute.isAutoIncremented()
+#end
+
+==================================================
+ENTITY ATTRIBUTES
+==================================================
+#foreach( $attribute in $entity.attributes )
+ ------------------------------
+ Attribute : $attribute.name
+ ------------------------------
+  ${DOLLAR}attribute.name        = "$attribute.name"
+  ${DOLLAR}attribute.neutralType = "$attribute.neutralType"
+  ${DOLLAR}attribute.type        = "$attribute.type"
+  ${DOLLAR}attribute.fullType    = "$attribute.fullType"
+  ${DOLLAR}attribute.getter      = "$attribute.getter"
+  ${DOLLAR}attribute.setter      = "$attribute.setter"
+  ${DOLLAR}attribute.label       = "$attribute.label"
+  ${DOLLAR}attribute.inputType   = "$attribute.inputType"
+  ${DOLLAR}attribute.isPrimitiveType() = $attribute.isPrimitiveType() 
+ Java bean validation annotations :
+$beanValidation.annotations(2, $attribute)
+ JPA annotations :
+$jpa.fieldAnnotations(2, $attribute)
+
+ ID, PK and FK :
+  ${DOLLAR}attribute.isKeyElement()       = $attribute.isKeyElement()
+  ${DOLLAR}attribute.isAutoIncremented()  = $attribute.isAutoIncremented()
+  ${DOLLAR}attribute.isUsedInForeignKey() = $attribute.isUsedInForeignKey()
+
+ Database :
+  ${DOLLAR}attribute.databaseName         = $attribute.databaseName
+  ${DOLLAR}attribute.databaseType         = $attribute.databaseType
+  ${DOLLAR}attribute.jdbcTypeCode         = $attribute.jdbcTypeCode
+  ${DOLLAR}attribute.databaseSize          = $attribute.databaseSize
+  ${DOLLAR}attribute.isDatabaseNotNull         = $attribute.isDatabaseNotNull()
+  ${DOLLAR}attribute.hasDatabaseDefaultValue() = $attribute.hasDatabaseDefaultValue()
+  ${DOLLAR}attribute.databaseDefaultValue      = $attribute.databaseDefaultValue
+
+#end
