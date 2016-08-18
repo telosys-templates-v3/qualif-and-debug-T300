@@ -1,8 +1,6 @@
-
-
-==================================================
-ENTITY $entity.name 
-==================================================
+===================================================================================
+ENTITY "$entity.name"  ( generation date and time : $today.date $today.time )
+===================================================================================
 
 * GENERAL INFO 
 ${DOLLAR}entity.name            = "$entity.name"    ( ${DOLLAR}fn.uncapitalize(${DOLLAR}entity.name) = "$fn.uncapitalize($entity.name)" )
@@ -21,6 +19,9 @@ $env.setEntityClassNameSuffix("MySuffix")
 entityClassNameSuffix : $env.entityClassNameSuffix
 ${DOLLAR}entity.name            = "$entity.name" 
 ${DOLLAR}entity.fullName        = "$entity.fullName"
+
+#set( $env.entityClassNamePrefix = "" ) 
+#set( $env.entityClassNameSuffix = "" ) 
 
 * ATTRIBUTES ( ${DOLLAR}entity.attributes )
 #set ($attributes = $entity.attributes )
@@ -60,6 +61,9 @@ ENTITY ATTRIBUTES
   ${DOLLAR}attribute.label       = "$attribute.label"
   ${DOLLAR}attribute.inputType   = "$attribute.inputType"
   ${DOLLAR}attribute.isPrimitiveType() = $attribute.isPrimitiveType() 
+  ${DOLLAR}attribute.isReferencingAnotherEntity() = $attribute.isReferencingAnotherEntity()
+  ${DOLLAR}attribute.referencedEntityType         = "$attribute.referencedEntityType"
+
  Java bean validation annotations :
 $beanValidation.annotations(2, $attribute)
  JPA annotations :
@@ -74,9 +78,43 @@ $jpa.fieldAnnotations(2, $attribute)
   ${DOLLAR}attribute.databaseName         = $attribute.databaseName
   ${DOLLAR}attribute.databaseType         = $attribute.databaseType
   ${DOLLAR}attribute.jdbcTypeCode         = $attribute.jdbcTypeCode
-  ${DOLLAR}attribute.databaseSize          = $attribute.databaseSize
+  ${DOLLAR}attribute.databaseSize         = $attribute.databaseSize
   ${DOLLAR}attribute.isDatabaseNotNull         = $attribute.isDatabaseNotNull()
   ${DOLLAR}attribute.hasDatabaseDefaultValue() = $attribute.hasDatabaseDefaultValue()
   ${DOLLAR}attribute.databaseDefaultValue      = $attribute.databaseDefaultValue
 
+#end
+
+==================================================
+ENTITY LINKS  ( links count = $entity.links.size() )
+==================================================
+#foreach( $link in $entity.links )
+ ------------------------------
+ Link 
+ ------------------------------
+  ${DOLLAR}link.id                       = $link.id
+  ${DOLLAR}link.isSelected()             = $link.isSelected()
+  ${DOLLAR}link.targetEntity.name        = $link.targetEntity.name
+  ${DOLLAR}link.targetEntityFullType     = $link.targetEntityFullType
+  ${DOLLAR}link.cardinality              = $link.cardinality
+  ${DOLLAR}link.isOwningSide()           = $link.isOwningSide()
+  ${DOLLAR}link.isCardinalityOneToOne    = $link.isCardinalityOneToOne()
+  ${DOLLAR}link.isCardinalityManyToOne   = $link.isCardinalityManyToOne()
+  ${DOLLAR}link.isCardinalityOneToMany   = $link.isCardinalityOneToMany()
+  ${DOLLAR}link.isCardinalityManyToMany  = $link.isCardinalityManyToMany()
+
+  ${DOLLAR}link.attributesCount   = $link.attributesCount 
+  ${DOLLAR}link.attributes.size() = $link.attributes.size()
+#foreach( $linkAttributes in $link.attributes )
+  . originAttribute = $linkAttributes.originAttribute.name
+  . targetAttribute = $linkAttributes.targetAttribute.name
+#end
+
+#end
+
+==================================================
+FOREIGN KEY(s)  ( foreign keys count = $entity.databaseForeignKeysCount )
+==================================================
+#foreach( $fk in $entity.databaseForeignKeys )
+  ${DOLLAR}fk.name = $fk.name
 #end
