@@ -45,6 +45,12 @@ $jpa.entityAnnotations(2, $entity)
  . $attribute.name : type = $attribute.type , auto-incremented = $attribute.isAutoIncremented()
 #end
 
+* DATABASE FOREIGN KEYS : 
+${DOLLAR}entity.databaseForeignKeysCount = $entity.databaseForeignKeysCount
+#foreach( $fk in $entity.databaseForeignKeys )
+ . $fk.name : $fk.tableName --> $fk.referencedTableName ( $fk.columnsCount columns )
+#end
+
 ==================================================
 ENTITY ATTRIBUTES
 ==================================================
@@ -61,8 +67,6 @@ ENTITY ATTRIBUTES
   ${DOLLAR}attribute.label       = "$attribute.label"
   ${DOLLAR}attribute.inputType   = "$attribute.inputType"
   ${DOLLAR}attribute.isPrimitiveType() = $attribute.isPrimitiveType() 
-  ${DOLLAR}attribute.isReferencingAnotherEntity() = $attribute.isReferencingAnotherEntity()
-  ${DOLLAR}attribute.referencedEntityType         = "$attribute.referencedEntityType"
 
  Java bean validation annotations :
 $beanValidation.annotations(2, $attribute)
@@ -72,7 +76,20 @@ $jpa.fieldAnnotations(2, $attribute)
  ID, PK and FK :
   ${DOLLAR}attribute.isKeyElement()       = $attribute.isKeyElement()
   ${DOLLAR}attribute.isAutoIncremented()  = $attribute.isAutoIncremented()
-  ${DOLLAR}attribute.isUsedInForeignKey() = $attribute.isUsedInForeignKey()
+##  ${DOLLAR}attribute.isUsedInForeignKey() = $attribute.isUsedInForeignKey()
+  ${DOLLAR}attribute.isFK()          = $attribute.isFK()
+  ${DOLLAR}attribute.isFKSimple()    = $attribute.isFKSimple()
+  ${DOLLAR}attribute.isFKComposite() = $attribute.isFKComposite()
+##  ${DOLLAR}attribute.isReferencingAnotherEntity() = $attribute.isReferencingAnotherEntity()
+##  ${DOLLAR}attribute.referencedEntityType         = "$attribute.referencedEntityType"
+#if ( $attribute.isFK() )
+  ${DOLLAR}attribute.referencedEntityName           = "$attribute.referencedEntityName"
+  ${DOLLAR}attribute.referencedEntity.name          = "$attribute.referencedEntity.name"
+  ${DOLLAR}attribute.referencedEntity.fullName      = "$attribute.referencedEntity.fullName"
+  ${DOLLAR}attribute.referencedEntity.databaseTable = "$attribute.referencedEntity.databaseTable"
+#else
+  Not 'FK' => cannot get 'referenced Entity'
+#end
 
  Database :
   ${DOLLAR}attribute.databaseName         = $attribute.databaseName
@@ -103,11 +120,18 @@ ENTITY LINKS  ( links count = $entity.links.size() )
   ${DOLLAR}link.isCardinalityOneToMany   = $link.isCardinalityOneToMany()
   ${DOLLAR}link.isCardinalityManyToMany  = $link.isCardinalityManyToMany()
 
+  ${DOLLAR}link.hasJoinTable()           = $link.hasJoinTable()
+#if ( $link.hasJoinTable() )
+  ${DOLLAR}link.joinTableName            = $link.joinTableName
+#else
+  No join table : cannot call ${DOLLAR}link.joinTableName
+#end
+
   ${DOLLAR}link.attributesCount   = $link.attributesCount 
   ${DOLLAR}link.attributes.size() = $link.attributes.size()
-#foreach( $linkAttributes in $link.attributes )
-  . originAttribute = $linkAttributes.originAttribute.name
-  . targetAttribute = $linkAttributes.targetAttribute.name
+#foreach( $attributesPair in $link.attributes )
+  . originAttribute = $attributesPair.originAttribute.name
+  . targetAttribute = $attributesPair.targetAttribute.name
 #end
 
 #end

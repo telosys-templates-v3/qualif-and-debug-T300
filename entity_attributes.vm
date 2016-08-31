@@ -58,7 +58,7 @@ ${DOLLAR}entity.getAttributesByCriteria(${DOLLAR}const.NOT_KEY, ${DOLLAR}const.N
 #set( $basicAttributes = $entity.getAttributesByCriteria( $const.NOT_KEY, $const.NOT_IN_SELECTED_LINKS ) )
 count = $basicAttributes.size()
 #foreach( $attribute in $basicAttributes )
- . $attribute.name ( key element = $attribute.isKeyElement(), used in FK = $attribute.isUsedInForeignKey() )
+ . $attribute.name ( key element = $attribute.isKeyElement(), used in FK = $attribute.isFK() )
 #end
 
 Selection = attributes that are "not in the Primary Key" and "in a Foreign Key of the selected links"
@@ -67,7 +67,7 @@ ${DOLLAR}entity.getAttributesByCriteria(${DOLLAR}const.NOT_KEY, ${DOLLAR}const.I
 #set( $fkAttributes = $entity.getAttributesByCriteria( $const.NOT_KEY, $const.IN_SELECTED_LINKS ) )
 count = $fkAttributes.size()
 #foreach( $attribute in $fkAttributes )
- . $attribute.name ( key element = $attribute.isKeyElement(), used in FK = $attribute.isUsedInForeignKey() )
+ . $attribute.name ( key element = $attribute.isKeyElement(), used in FK = $attribute.isFK() )
 #end
 
 
@@ -100,9 +100,9 @@ ENTITY LINKS  ( links count = $entity.links.size() )
 
   ${DOLLAR}link.attributesCount   = $link.attributesCount 
   ${DOLLAR}link.attributes.size() = $link.attributes.size()
-#foreach( $linkAttributes in $link.attributes )
-  . originAttribute = $linkAttributes.originAttribute.name
-  . targetAttribute = $linkAttributes.targetAttribute.name
+#foreach( $attributesPair in $link.attributes )
+  . originAttribute = $attributesPair.originAttribute.name
+  . targetAttribute = $attributesPair.targetAttribute.name
 #end
 
 #end
