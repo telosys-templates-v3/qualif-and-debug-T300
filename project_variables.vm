@@ -26,3 +26,7 @@ From ${DOLLAR}project.variables ( all variables including predefined variables )
  . ${DOLLAR}$var.name = $var.value
 #end
 
+PROJECT OBJECT :
+================
+${DOLLAR}project.locationFullPath        = $project.locationFullPath
+${DOLLAR}project.templatesFolderFullPath = $project.templatesFolderFullPath
