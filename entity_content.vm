@@ -67,6 +67,7 @@ ENTITY ATTRIBUTES
   ${DOLLAR}attribute.label       = "$attribute.label"
   ${DOLLAR}attribute.inputType   = "$attribute.inputType"
   ${DOLLAR}attribute.isPrimitiveType() = $attribute.isPrimitiveType() 
+  ${DOLLAR}attribute.isNotNull()       = $attribute.isNotNull()
 
  Java bean validation annotations :
 $beanValidation.annotations(2, $attribute)
