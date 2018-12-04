@@ -12,5 +12,5 @@ ${DOLLAR}today.time = $today.time
 ${DOLLAR}today.date("dd/MM/yyyy") = $today.date("dd/MM/yyyy")
 ${DOLLAR}today.time("HH:mm")      = $today.date("HH:mm")
 
-#assertTrue( $generator.name.equals('Telosys Tools Generator'), "Invalid generator name" )
-#assertTrue( $generator.version.equals('3.0.0') , "Invalid generator version" )
+## #assertTrue( $generator.name.equals('Telosys Tools Generator'), "Invalid generator name" )
+## #assertTrue( $generator.version.equals('3.0.0') , "Invalid generator version" )
